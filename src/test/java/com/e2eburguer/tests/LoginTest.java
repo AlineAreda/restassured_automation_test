@@ -12,6 +12,7 @@ import java.io.IOException;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
+@DisplayName("Testes do endpoint /session")
 public class LoginTest extends BaseTest {
 
     @DisplayName("Autenticação com sucesso")
@@ -64,8 +65,6 @@ public class LoginTest extends BaseTest {
                 .body("error", is("E-mail e senha são obrigatórios."))
         ;
     }
-
-
 
 
 }
