@@ -7,11 +7,10 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import java.io.IOException;
 
-import static com.e2eburguer.utils.UtilsUser.deleteUser;
-import static com.e2eburguer.utils.UtilsUser.login;
+import static com.e2eburguer.utils.Utils.deleteUser;
+import static com.e2eburguer.utils.Utils.login;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
-import static io.restassured.module.jsv.JsonSchemaValidator.*;
 
 @DisplayName("Testes do endpoint /user")
 public class UserTest extends BaseTest {
