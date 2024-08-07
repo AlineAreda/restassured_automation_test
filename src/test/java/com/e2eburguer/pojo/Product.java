@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.File;
+
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @Builder
@@ -14,8 +16,12 @@ import lombok.NoArgsConstructor;
 
 
 public class Product {
-    private  String name;
+    private String categoryId;
+    private String file;
+    private String name;
     private String price;
     private String description;
     private String banner;
+
+
 }
