@@ -28,5 +28,16 @@ public class ProductDataFactory {
         return product;
     }
 
+    public static Product getProduct(){
+        Product product = new Product();
+
+        product.setName("Jira Burguer");
+        product.setPrice("35");
+        product.setDescription("Hambúrguer Grelhado Na Brasa.Cebola, Tomate e Queijo");
+        product.setCategoryId("3de5e149-3483-445a-b5c6-3e66c9df27f5");
+
+        return product;
+    }
+
 
 }
