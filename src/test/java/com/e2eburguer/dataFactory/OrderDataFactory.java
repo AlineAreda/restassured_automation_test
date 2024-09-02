@@ -1,11 +1,6 @@
 package com.e2eburguer.dataFactory;
 
 import com.e2eburguer.pojo.Order;
-import com.e2eburguer.pojo.User;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,5 +23,7 @@ public class OrderDataFactory {
         payload.put("amount", 2);
         return payload;
     }
+
+
 
 }
