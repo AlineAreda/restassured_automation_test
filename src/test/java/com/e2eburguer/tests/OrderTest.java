@@ -62,5 +62,20 @@ public class OrderTest extends BaseTest {
                 .body("amount", is(2));
     }
 
+    @DisplayName("Verificar mensagem quando lista vazia")
+    @Test
+    public void testGetOrdersEmptyList() throws IOException {
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization",  "Bearer " + login())
+        .when()
+                .get("orders")
+        .then()
+                .statusCode(200)
+                .log().all()
+                .body("message", is("Nenhum pedido encontrado."));
+    }
+
 
 }
