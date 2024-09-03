@@ -52,20 +52,50 @@ mvn allure:serve
 ```bash
 automation-restassured/
 │
+├── .allure/                                  # Configurações específicas do Allure
+├── .idea/                                    # Configurações do ambiente de desenvolvimento (IntelliJ IDEA)
+├── allure-results/                           # Resultados dos testes gerados pelo Allure
 ├── src/
-│   ├── test/
-│   │   ├── java/
-│   │   │   └── com/e2eburguer/tests/                            # Classes de teste
-│   │   └── resources/
-│   │       └── properties/                                                  # Configurações por ambiente
-│
-├── target/                                                                        # Diretório de build e resultados
-│   ├── allure-results/                                                     # Resultados do Allure
-│   └── surefire-reports/                                                # Relatórios do Surefire
-│
-├── .gitignore                                                                 # Arquivos e diretórios ignorados pelo Git
-├── pom.xml                                                                   # Arquivo de configuração do Maven
-└── README.md                                                          # Este arquivo
+│   └── test/
+│       ├── java/
+│       │   └── com/e2eburguer/
+│       │       ├── config/                   # Configurações e classes base
+│       │       │   ├── BaseTest.java
+│       │       │   └── Configuracoes.java
+│       │       ├── dataFactory/              # Fábricas de dados para criação de objetos de teste
+│       │       │   ├── OrderDataFactory.java
+│       │       │   ├── ProductDataFactory.java
+│       │       │   └── UserDataFactory.java
+│       │       ├── pojo/                     # Classes POJO representando os objetos principais
+│       │       │   ├── Category.java
+│       │       │   ├── Item.java
+│       │       │   ├── Order.java
+│       │       │   ├── Product.java
+│       │       │   └── User.java
+│       │       ├── tests/                    # Classes de teste
+│       │       │   ├── CategoryTest.java
+│       │       │   ├── LoginTest.java
+│       │       │   ├── OrderTest.java
+│       │       │   ├── ProductTest.java
+│       │       │   └── UserTest.java
+│       │       └── utils/                    # Utilitários
+│       │           └── Utils.java
+│       └── resources/
+│           ├── files/                        # Arquivos de suporte para testes
+│           │   └── burguer.jpeg
+│           ├── payloads/                     # JSONs de payload para requisições
+│           │   ├── addItem.json
+│           │   ├── login.json
+│           │   └── userDuplicate.json
+│           ├── properties/                   # Arquivos de configuração de ambientes
+│           └── schemas/                      # Schemas JSON para validação
+│               └── postUserSchema.json
+├── target/                                   # Diretório de build e resultados (gerado automaticamente)
+│   └── ...                                   # Outros diretórios gerados pelo Maven
+├── .gitignore                                # Arquivos e diretórios ignorados pelo Git
+├── pom.xml                                   # Arquivo de configuração do Maven
+└── README.md                                 # Documentação do projeto
+
 ```
 
 
