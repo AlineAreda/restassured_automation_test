@@ -16,8 +16,8 @@ Este projeto é uma suíte de testes automatizados para APIs utilizando o RestAs
 
 -   **src/test/java**: Contém as classes de testes.
 -   **src/test/resources**: Contém arquivos de configuração e dados de teste.
--   **target**: Diretório onde são gerados os resultados da compilação e dos testes, incluindo o diretório `allure-results` que armazena os resultados para o Allure. *diretórios ignorados pelo Git
--
+-   **target**: Diretório onde são gerados os resultados da compilação e dos testes, incluindo o diretório `allure-results` que armazena os resultados para o Allure. *diretório ignorado pelo Git.
+
 ## 🤖 Configuração e Execução
 1. Clone o repositório para sua máquina local:
 
