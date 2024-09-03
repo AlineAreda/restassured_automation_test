@@ -40,11 +40,11 @@ mvn clean test
 mvn allure:serve
 ```
 
-## Visão Relatório de execução Allure
-![Overview Testes executados](![overview testes e2eburguer](https://github.com/user-attachments/assets/238a151e-4110-42f5-b01d-7f646e552c2f))
+### Visão Relatório de execução Allure
+![overview testes e2eburguer](https://github.com/user-attachments/assets/238a151e-4110-42f5-b01d-7f646e552c2f)
 
 ### Suítes: Relatório Allure
-![Suítes de Testes](![Allure report - suites e2eburguer](https://github.com/user-attachments/assets/3968cfe0-9790-4479-b931-a496a16debba))
+![Allure report - suites e2eburguer](https://github.com/user-attachments/assets/3968cfe0-9790-4479-b931-a496a16debba)
 
 ## Estrutura de Arquivos
 
