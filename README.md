@@ -52,9 +52,6 @@ mvn allure:serve
 ```bash
 automation-restassured/
 │
-├── .allure/                                  # Configurações específicas do Allure
-├── .idea/                                    # Configurações do ambiente de desenvolvimento (IntelliJ IDEA)
-├── allure-results/                           # Resultados dos testes gerados pelo Allure
 ├── src/
 │   └── test/
 │       ├── java/
@@ -90,8 +87,6 @@ automation-restassured/
 │           ├── properties/                   # Arquivos de configuração de ambientes
 │           └── schemas/                      # Schemas JSON para validação
 │               └── postUserSchema.json
-├── target/                                   # Diretório de build e resultados (gerado automaticamente)
-│   └── ...                                   # Outros diretórios gerados pelo Maven
 ├── .gitignore                                # Arquivos e diretórios ignorados pelo Git
 ├── pom.xml                                   # Arquivo de configuração do Maven
 └── README.md                                 # Documentação do projeto
