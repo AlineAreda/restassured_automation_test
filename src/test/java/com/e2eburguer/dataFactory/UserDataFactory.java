@@ -32,9 +32,9 @@ public class UserDataFactory {
 
     public static User userId(){
         User userID = new User();
-        userID.setName("Teste");
+        userID.setName("Teste QA");
         userID.setEmail("user@teste.com");
-        userID.setUserId("d7d1b39a-1927-47c4-9149-9fd26fc3cf78");
+        userID.setUserId("d9a98ee6-b49b-4492-b376-01de29c82579");
 
 
         return userID;
