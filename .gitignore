@@ -43,3 +43,8 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Ignore allure-results directory
+allure-results/
+ .allure/
+ .allure

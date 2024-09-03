@@ -73,7 +73,6 @@ public class OrderTest extends BaseTest {
                 .get("orders")
         .then()
                 .statusCode(200)
-                .log().all()
                 .body("message", is("Nenhum pedido encontrado."));
     }
 
