@@ -41,10 +41,13 @@ mvn allure:serve
 ```
 
 ### Visão Relatório de execução Allure
-![overview testes e2eburguer](https://github.com/user-attachments/assets/238a151e-4110-42f5-b01d-7f646e552c2f)
+![Image](https://github.com/user-attachments/assets/292c8438-b63a-4ff0-8ef8-9a2a5b2fb16e)
+
+### Visão Relatório Gráfico Allure
+![Image](https://github.com/user-attachments/assets/96cb13b4-7dd5-42ed-8045-2924fbe7abcc)
 
 ### Suítes: Relatório Allure
-![Allure report - suites e2eburguer](https://github.com/user-attachments/assets/3968cfe0-9790-4479-b931-a496a16debba)
+![Image](https://github.com/user-attachments/assets/7cee61db-5c4a-4dcd-8558-69a86048a97a)
 
 ## Estrutura de Arquivos
 
