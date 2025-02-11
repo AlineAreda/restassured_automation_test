@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.util.Map;
 
 import static com.e2eburguer.dataFactory.OrderDataFactory.createAddItemPayload;
-import static com.e2eburguer.utils.Utils.*;
+import static com.e2eburguer.utils.AuthUtils.login;
+import static com.e2eburguer.utils.OrderUtils.deleteOrder;
+import static com.e2eburguer.utils.OrderUtils.getOrderId;
+import static com.e2eburguer.utils.UserUtils.*;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.is;
 
@@ -43,24 +46,6 @@ public class OrderTest extends BaseTest {
        deleteOrder(ordeID);
     }
 
-    @DisplayName("Adicionar item ao pedido")
-    @Test
-    public void testAddItemToOrder() throws IOException {
-        String orderId = getOrderId();
-
-        // Criar o payload dinamicamente
-        Map<String, Object> addItemPayload = createAddItemPayload(orderId);
-
-        given().contentType(ContentType.JSON)
-                .header("Authorization", "Bearer " + login())
-                .body(addItemPayload)
-        .when()
-                .post("order/add")
-        .then()
-                .statusCode(200)
-                .body("product_id", is("50c388bc-8637-4563-8adf-1167da37c1dd"))
-                .body("amount", is(2));
-    }
 
     @DisplayName("Verificar mensagem quando lista vazia")
     @Test

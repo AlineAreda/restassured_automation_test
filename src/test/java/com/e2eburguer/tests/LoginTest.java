@@ -15,7 +15,7 @@ import static org.hamcrest.Matchers.is;
 @DisplayName("Testes do endpoint /session")
 public class LoginTest extends BaseTest {
 
-    @DisplayName("Autenticação com sucesso")
+    @DisplayName("Autenticação perfil gestão com sucesso")
     @Test
     public void testShouldLogInUser() throws IOException {
         User user = UserDataFactory.login();
@@ -29,11 +29,43 @@ public class LoginTest extends BaseTest {
                 .statusCode(200);
     }
 
-    @DisplayName("Não deve logar com credenciais inválidas")
+    @DisplayName("Autenticação perfil salão com sucesso")
     @Test
-    public void testShouldNotAcceptInvalidCredentials() throws IOException {
-        User user = new User();
-        user.setEmail("teste.qa@email.com");
+    public void testShouldLogInProfileSalao() throws IOException {
+        User user = UserDataFactory.login();
+        user.setEmail("salao@e2eburguer.com.br");
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("session")
+        .then()
+                .statusCode(200);
+    }
+
+    @DisplayName("Não deve logar quando e-mail inválido.")
+    @Test
+    public void testShouldNotAcceptInvalidEmail() throws IOException {
+        User user = UserDataFactory.login();
+        user.setEmail("invalid@e2eburguer.com.br");
+
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("session")
+        .then()
+                .statusCode(401)
+                .body("error", is("Usuário e/ou Senha incorretos."))
+        ;
+    }
+
+    @DisplayName("Não deve logar quando senha inválida.")
+    @Test
+    public void testShouldNotAcceptInvalidPassword() throws IOException {
+        User user = UserDataFactory.login();
         user.setPassword("Teste@123");
 
 
@@ -47,6 +79,7 @@ public class LoginTest extends BaseTest {
                 .body("error", is("Usuário e/ou Senha incorretos."))
         ;
     }
+
 
     @DisplayName("E-mail e senha são obrigatórios")
     @Test
@@ -65,6 +98,5 @@ public class LoginTest extends BaseTest {
                 .body("error", is("E-mail e senha são obrigatórios."))
         ;
     }
-
 
 }

@@ -6,76 +6,188 @@ import com.e2eburguer.pojo.User;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.*;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.e2eburguer.utils.Utils.deleteUser;
-import static com.e2eburguer.utils.Utils.login;
+
+import static com.e2eburguer.utils.AuthUtils.login;
+import static com.e2eburguer.utils.UserUtils.*;
 import static io.restassured.RestAssured.*;
 import static org.hamcrest.Matchers.*;
 
 @DisplayName("Testes do endpoint /user")
 public class UserTest extends BaseTest {
 
-    private String userID;
 
-    @DisplayName("Cadastrar usuário com sucesso")
+    @DisplayName("Cadastrar novo usuário com perfil gestão")
     @Test
-    public void testCreateUser() throws IOException {
+    public void testRegisterGestaoUser() throws IOException {
 
-        User user = UserDataFactory.createUser();
+        User user = UserDataFactory.loadUser("isGestao");
 
-     this.userID= given()
+        String userID = given()
                 .contentType(ContentType.JSON)
                 .body(user)
         .when()
-                .post("users")
+                .post("user")
         .then()
-            .statusCode(201)
-            .body("name", is(user.getName()))
-            .body("email", is(user.getEmail()))
-            .extract()
+                .statusCode(201)
+                .body("name", is(user.getName()))
+                .body("email", is(user.getEmail()))
+                .extract()
                 .path("id");
 
         deleteUser(userID);
+
     }
 
-    @DisplayName("Não deve permitir cadastrar usuário já cadastrado")
+    @DisplayName("Cadastrar novo usuário com perfil salão")
     @Test
-    public void testShouldNotRegisterDuplicate() throws IOException {
-        User user = UserDataFactory.userDuplicate();
+    public void testRegisterSalaoUser() throws IOException {
+
+        User user = UserDataFactory.loadUser("isSalao");
+
+        String userID = given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("user")
+        .then()
+                .statusCode(201)
+                .body("name", is(user.getName()))
+                .body("email", is(user.getEmail()))
+                .extract()
+                .path("id");
+
+        deleteUser(userID);
+
+    }
+
+    @DisplayName("Não deve cadastrar usuário quando e-mail já cadastrado")
+    @Test
+    public void testNotRegisterDuplicateEmail() throws IOException {
+        User user = UserDataFactory.userIsGestao();
 
         given()
                 .contentType(ContentType.JSON)
                 .body(user)
         .when()
-                .post("users")
+                .post("user")
         .then()
                 .statusCode(409)
-                .body("error", is("E-mail já cadastrado"));
+                .body("error", is("E-mail já cadastrado."));
     }
 
-    @DisplayName("Dados obrigatórios na criação do usuário: name, email e password")
+    @DisplayName("Verificar os campos obrigatórios no cadastro do usuário")
     @Test
-    public void testShouldBeRequiredDataInCreateUser(){
+    public void testValidateRequiredFields(){
 
-        User user = UserDataFactory.createUser();
+        User user = UserDataFactory.userIsGestao();
         user.setName("");
         user.setEmail("");
         user.setPassword("");
+        user.setConfirmPassword("");
+        user.setIsGestao(null);
 
         given()
                 .contentType(ContentType.JSON)
                 .body(user)
         .when()
-                .post("users")
+                .post("user")
         .then()
                 .statusCode(400)
-                .body("error", is("Nome, e-mail e senha são obrigatórios."));
+                .body("error", is("Preencha todos oc campos para prosseguir com o cadastro!"));
 
     }
 
-    @DisplayName("Buscar Detalhes do usuário")
+
+    @DisplayName("Não deve cadastrar usuário sem preencher nome completo")
     @Test
-    public void testGetUserDetails() throws IOException {
+    public void testValidateRequiredFullNameForUserRegistration(){
+
+        User user = UserDataFactory.userIsGestao();
+        user.setName("Marina");
+
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("user")
+        .then()
+                .statusCode(400)
+                .body("error", is("Preencha com nome e sobrenome."));
+
+    }
+
+
+    @DisplayName("Validar quando senha inválida")
+    @Test
+    public void testInvalidPassword(){
+
+        User user = UserDataFactory.userIsGestao();
+        user.setPassword("Test1");
+
+        String expectedMessage = "Senha inválida. A senha deve conter entre 8 e 12 caracteres, incluindo ao menos uma letra maiúscula, ao menos um número e ao menos um caractere especial.";
+
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("user")
+        .then()
+                .statusCode(400)
+                .body("error", is(expectedMessage));
+
+    }
+
+
+    @DisplayName("Validar quando senhas não coincidem")
+    @Test
+    public void testPasswordMismatch(){
+
+        User user = UserDataFactory.userIsGestao();
+        user.setConfirmPassword("Teste123");
+
+        String expectedMessage = "As senhas não coincidem.";
+
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("user")
+        .then()
+                .statusCode(400)
+                .body("error", is(expectedMessage));
+
+    }
+
+
+    @DisplayName("Validar quando e-mail inválido")
+    @Test
+    public void testInvalidEmail(){
+
+        User user = UserDataFactory.userIsGestao();
+        user.setEmail("invalid.email.com");
+
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(user)
+        .when()
+                .post("user")
+        .then()
+                .statusCode(400)
+                .body("error", is("Formato de e-mail inválido."));
+
+    }
+
+
+    @DisplayName("Buscar detalhes do usuário logado")
+    @Test
+    public void testFetchUserDetails() throws IOException {
         User user = UserDataFactory.userId();
 
         given()
@@ -83,34 +195,118 @@ public class UserTest extends BaseTest {
                 .header("Authorization",  "Bearer " + login())
                 .queryParam("user_id", user.getUserId())
         .when()
-                .get("me")
+                .get("user/detail")
         .then()
                 .statusCode(200)
                 .body("id", is(user.getUserId()))
                 .body("name", is(user.getName()))
                 .body("email", is(user.getEmail()))
+                .body("isGestao", is (user.getIsGestao()))
         ;
-
 
     }
 
 
-    //exemplo de teste de schema - contrato
-   // @DisplayName("Teste de contrato")
-   // @Test
-  //  public void testCreateUserContract() throws IOException {
+    @DisplayName("Buscar lista de usuários cadastrados")
+    @Test
+    public void testGetUsersList() throws IOException {
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + login())
+        .when()
+                .get("users")
+        .then()
+                .statusCode(200)
+                .body("$", not(empty()))
+                .body("id", everyItem(notNullValue()))
+                .body("name", everyItem(notNullValue()))
+                .body("email", everyItem(notNullValue()))
+                .body("isGestao", everyItem(isA(Boolean.class)))
+                .body("$", hasSize(greaterThan(0)));
+    }
 
-  //      User user = UserDataFactory.createUser();
+    @DisplayName("Verificar tentativa de busca de um usuário quando ID inexistente")
+    @Test
+    public void testUserNotFoundById() throws IOException {
+        String userID = "123456";
 
-  //      given()
-  //              .contentType(ContentType.JSON)
-  //              .body(user)
-  //      .when()
-  //              .post("users")
- //      .then()
-  //              .statusCode(201)
-  //              .body(matchesJsonSchemaInClasspath("schemas/postUserSchema.json"));
-  //  }
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization",  "Bearer " + login())
+                .queryParam("user_id", userID)
+        .when()
+                .get("users/"+userID)
+        .then()
+                .statusCode(404)
+                .body("error", is("Usuário não encontrado."));
 
+    }
+
+
+
+    @DisplayName("Atualizar dados de usuário")
+    @Test
+    public void testUpdateUserDetails() throws IOException {
+        User dataUser = UserDataFactory.updateUser();
+        String userId = dataUser.getUserId();
+
+        Map<String, Object> updatedFields = new HashMap<>();
+        updatedFields.put("name", "Maria do Carmo Atualizada");
+        updatedFields.put("password", "NovaSenha@2!");
+        updatedFields.put("confirmPassword", "NovaSenha@2!");
+        updatedFields.put("isGestao", false);
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization", "Bearer " + login())
+                .body(updatedFields)
+                .pathParam("user_id", userId)
+        .when()
+                .put("user/{user_id}")
+        .then()
+                .statusCode(200)
+                .body("id", is(userId))
+                .body("name", is("Maria do Carmo Atualizada"))
+                .body("isGestao", is(false))
+                .body("email", is("m.carmo@e2ebruguer.com.br"));
+
+        restoreUserState(userId);
+
+    }
+
+
+    @DisplayName("Excluir um usuário pelo ID")
+    @Test
+    public void testDeleteUser() throws IOException {
+        String userID = createUser("isSalao");
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization",  "Bearer " + login())
+                .queryParam("user_id", userID)
+        .when()
+                .delete("user/delete")
+        .then()
+                .statusCode(204);
+
+    }
+
+
+    @DisplayName("Tentar excluir um usuário que não foi encontrado")
+    @Test
+    public void testDeleteUserNotFound() throws IOException {
+        String userID = "123456";
+
+        given()
+                .contentType(ContentType.JSON)
+                .header("Authorization",  "Bearer " + login())
+                .queryParam("user_id", userID)
+        .when()
+                .delete("user/delete")
+        .then()
+                .statusCode(404)
+                .body("error", is("Usuário não encontrado."));
+
+    }
 
 }

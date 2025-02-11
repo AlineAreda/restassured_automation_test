@@ -13,6 +13,7 @@ public class BaseTest {
         baseURI = config.baseURI();
         port = config.port();
         basePath = config.basePath();
+
     }
 
 }

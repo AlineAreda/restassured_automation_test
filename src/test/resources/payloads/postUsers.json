@@ -1,0 +1,17 @@
+{
+  "isGestao": {
+    "name": "Marina Bacchio",
+    "email": "marinabacchio@e2ebruguer.com.br",
+    "password": "Teste@123!",
+    "confirmPassword": "Teste@123!",
+    "isGestao": true
+  },
+  "isSalao": {
+    "name": "João Silva",
+    "email": "j.silva@e2ebruguer.com.br",
+    "password": "Teste@123!",
+    "confirmPassword": "Teste@123!",
+    "isGestao": false
+  }
+}
+

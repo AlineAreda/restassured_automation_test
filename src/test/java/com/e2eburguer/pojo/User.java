@@ -16,5 +16,9 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String confirmPassword;
     private String userId;
+    private Boolean isGestao;
+
+
 }
