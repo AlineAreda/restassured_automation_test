@@ -32,9 +32,8 @@ pipeline {
 
     post {
         always {
-            node {
+            node('main') {
                 script {
-                    // Verifica se o diretório de resultados existe
                     if (fileExists('target/allure-results')) {
                         allure([
                             includeProperties: false,
