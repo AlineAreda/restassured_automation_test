@@ -73,6 +73,77 @@ mvn allure:serve
 
 Isso abrirá o **relatório interativo** em seu navegador.
 
+
+## **⚙️  Execução Jenkins**
+
+### **1️⃣ Clonar o Repositório**
+
+```
+git clone https://github.com/seu-usuario/automation-restassured.git
+cd automation-restassured
+```
+
+### **2️⃣ Subir o Ambiente com Docker**
+
+Caso queira rodar os testes dentro de um container **Docker**, siga estes passos:
+
+```
+docker-compose up -d
+```
+
+> Isso iniciará o Jenkins e qualquer outro serviço necessário dentro de containers.
+
+### **3️⃣ Executar os Testes dentro do Container**
+
+```
+docker exec -it nome_do_container mvn clean test
+```
+
+> Substitua `nome_do_container` pelo **nome do container Maven** que estiver rodando.
+
+### **4️⃣ Executar os Testes via Jenkins (CI/CD)**
+
+Se os testes forem executados via **Jenkins dentro de um container Docker**, siga estas etapas:
+
+1️⃣ **Acesse o Jenkins**
+
+-   Se o Jenkins estiver rodando via Docker, acesse:
+
+    ```
+    http://localhost:8080/jenkins
+    ```
+
+-   Se estiver rodando em outro servidor, acesse via IP do servidor.
+
+
+2️⃣ **Configurar Pipeline Script from SCM no Jenkins**
+
+-   Vá até **Configurar > Pipeline**.
+
+-   Selecione **"Pipeline Script from SCM"**.
+
+-   Escolha **"Git"** como SCM e adicione a URL do repositório:
+
+    ```
+    https://github.com/perfil/automation-restassured.git
+    ```
+
+-   No campo **"Branch Specifier"**, defina `main` (ou outro branch usado).
+
+-   No campo **"Script Path"**, defina:
+
+    ```
+    Jenkinsfile
+    ```
+
+-   Clique em **Salvar** e execute o pipeline.
+
+
+3️⃣ **Rodar o Pipeline no Jenkins**
+
+-   Após configurar, clique em **"Build Now"** para executar os testes.
+
+- ✅ **Relatórios gerados e publicados automaticamente no Jenkins** 📊
 ----------
 
 ## **📊 Visão dos Relatórios Allure**
@@ -91,11 +162,9 @@ Isso abrirá o **relatório interativo** em seu navegador.
 
 ----------
 
+## **📌 Estrutura de Arquivos**
 
-## Estrutura de Arquivos
-
-
-```bash
+```
 automation-restassured/
 │
 ├── src/
@@ -138,9 +207,9 @@ automation-restassured/
 ├── Jenkinsfile                              # Pipeline de integração contínua no Jenkins
 ├── .gitignore                               # Arquivos e diretórios ignorados pelo Git
 ├── pom.xml                                  # Arquivo de configuração do Maven
-└── README.md                                # Documentação do projeto                              # Documentação do projeto
-
+└── README.md                                # Documentação do projeto
 ```
+
 ----------
 
 ## **📌 Notas Gerais**
