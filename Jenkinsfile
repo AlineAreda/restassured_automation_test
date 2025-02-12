@@ -1,14 +1,9 @@
 pipeline {
     agent {
         docker {
-            image 'maven:3.8.6-openjdk-17'
+            image 'maven:3.8.6-jdk-17'
             args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
-    }
-
-    environment {
-        ALLURE_RESULTS = 'target/allure-results'
-        ALLURE_REPORT = 'target/allure-report'
     }
 
     stages {
@@ -29,8 +24,8 @@ pipeline {
         }
         stage('Gerar Relatório Allure') {
             steps {
-                sh 'mvn allure:aggregate'
                 sh 'mvn allure:report'
+                sh 'mvn allure:aggregate'
             }
         }
     }
@@ -38,11 +33,16 @@ pipeline {
     post {
         always {
             script {
-                allure([
-                    includeProperties: false,
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: "${ALLURE_RESULTS}"]]
-                ])
+                // Verifica se o diretório de resultados existe
+                if (fileExists('target/allure-results')) {
+                    allure([
+                        includeProperties: false,
+                        reportBuildPolicy: 'ALWAYS',
+                        results: [[path: 'target/allure-results']]
+                    ])
+                } else {
+                    echo 'Diretório de resultados do Allure não encontrado. Relatório não gerado.'
+                }
             }
         }
     }
