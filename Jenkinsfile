@@ -6,11 +6,17 @@ pipeline {
         }
     }
 
-    tools {
-        allure 'Allure'
+    environment {
+        ALLURE_RESULTS = 'target/allure-results'
+        ALLURE_REPORT = 'target/allure-report'
     }
 
     stages {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
         stage('Build') {
             steps {
                 sh 'mvn clean install'
@@ -21,23 +27,23 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Gerar Allure Results') {
+        stage('Gerar Relatório Allure') {
             steps {
-                sh 'mvn allure:report'
                 sh 'mvn allure:aggregate'
+                sh 'mvn allure:report'
             }
         }
     }
 
     post {
         always {
-            allure([
-                includeProperties: false,
-                jdk: '',
-                properties: [],
-                reportBuildPolicy: 'ALWAYS',
-                results: [[path: 'target/allure-results']]
-            ])
+            script {
+                allure([
+                    includeProperties: false,
+                    reportBuildPolicy: 'ALWAYS',
+                    results: [[path: "${ALLURE_RESULTS}"]]
+                ])
+            }
         }
     }
 }
