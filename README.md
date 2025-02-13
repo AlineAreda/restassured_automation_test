@@ -35,7 +35,7 @@ O objetivo é garantir a **qualidade das APIs** do projeto backend [**E2EBurguer
 -   📁 `src/test/resources` → Contém arquivos de configuração, payloads e schemas JSON.
 
 -   📁 `target` → Diretório onde são gerados os resultados da compilação e dos testes.  
-    ⚠️ _Diretório ignorado pelo Git (_`_.gitignore_`_), pois é gerado automaticamente._
+    ⚠️ _Diretório ignorado pelo Git (_`_.gitignore_`_)_
 
 
 ----------
